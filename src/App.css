@@ -14,7 +14,24 @@ nav img {
 
 body {
   height: 100vh;
-  font-weight: 400;
+  font-weight: 600px;
   text-align: center;
-  padding-top: 5rem;
+  padding-top: 6rem;
+}
+
+.container-itemcount {
+  width: 150px;
+}
+
+.item-count {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.item-list {
+  display: flex;
+  flex-wrap: wrap;
+  min-width: 300px;
+  justify-content: space-around;
 }
