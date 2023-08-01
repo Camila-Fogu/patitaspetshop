@@ -19,7 +19,7 @@ const ItemDetailContainer = () => {
   }, []);
 
   return (
-    <div>
+    <div className="item-list">
       <ItemDetail {...product} />
     </div>
   );

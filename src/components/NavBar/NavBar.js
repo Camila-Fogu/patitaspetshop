@@ -11,22 +11,22 @@ function NavBar() {
     <Navbar expand="lg" fixed="top">
       <Container>
         <Link to="">
-          <Navbar.Brand href="#home">
-            <Image src={logo} roundedCircle />
-          </Navbar.Brand>
+          <Image src={logo} roundedCircle />
         </Link>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
           <Nav className="me-auto">
-            <Nav.Link>
-              <NavLink to={`/category/alimento`}>Alimento</NavLink>
-            </Nav.Link>
-            <Nav.Link>
-              <NavLink to={`/category/juguete`}>Juguetes</NavLink>
-            </Nav.Link>
-            <Nav.Link>
-              <NavLink to={`/category/accesorio`}>Accesorios</NavLink>
-            </Nav.Link>
+            <NavLink className="nav-link" to={`/category/alimento`}>
+              Alimento
+            </NavLink>
+
+            <NavLink className="nav-link" to={`/category/juguete`}>
+              Juguetes
+            </NavLink>
+
+            <NavLink className="nav-link" to={`/category/accesorio`}>
+              Accesorios
+            </NavLink>
           </Nav>
           <CartWidget />
         </Navbar.Collapse>

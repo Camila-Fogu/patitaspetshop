@@ -12,6 +12,10 @@ nav img {
   width: 3rem;
 }
 
+.nav-link {
+  text-decoration: none;
+}
+
 body {
   height: 100vh;
   font-weight: 600px;
@@ -32,11 +36,11 @@ body {
 .item-list {
   display: flex;
   flex-wrap: wrap;
-  min-width: 300px;
   justify-content: space-around;
 }
 
 .item {
+  padding: 1rem;
   margin: 1rem;
   display: flex;
   flex-direction: column;
@@ -45,11 +49,6 @@ body {
 }
 
 .image {
-  width: 50%;
-}
-
-.item-detail {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
+  width: 60%;
+  height: 60%;
 }
