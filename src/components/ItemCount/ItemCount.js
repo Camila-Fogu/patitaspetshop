@@ -1,41 +1,39 @@
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 
-function ItemCount({ stock, addProduct }) {
-  const [count, setCount] = useState(0);
+const ItemCount = ({ stock, onAdd }) => {
+  const [quantity, setQuantity] = useState(0);
 
-  function incrementarCount() {
-    if (count < stock) {
-      setCount(count + 1);
+  const increment = () => {
+    if (quantity < stock) {
+      setQuantity(quantity + 1);
     }
-  }
-
-  function decrementarCount() {
-    if (count > 0) {
-      setCount(count - 1);
+  };
+  const decrement = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
     }
-  }
-
+  };
   return (
     <div className="container-itemcount">
       <div className="item-count">
-        <Button onClick={decrementarCount} variant="warning">
+        <Button variant="warning" onClick={decrement}>
           -
         </Button>
 
-        <h4>{count}</h4>
+        <h4>{quantity}</h4>
 
-        <Button onClick={incrementarCount} variant="warning">
+        <Button variant="warning" onClick={increment}>
           +
         </Button>
       </div>
       <div>
-        <Button variant="warning" onClick={() => addProduct(count)}>
+        <Button variant="warning" onClick={() => onAdd(quantity)}>
           Agregar al carrito
         </Button>
       </div>
     </div>
   );
-}
+};
 
 export default ItemCount;

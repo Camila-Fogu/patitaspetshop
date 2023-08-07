@@ -1,85 +1,80 @@
-import { useState } from "react";
+import { Timestamp } from "firebase/firestore";
+import { CartContext } from "../../context/CartContext";
+import { useContext } from "react";
 import { db } from "../../firebase/config";
-import { addDoc, collection } from "firebase/firestore";
-import { useCartContext } from "../../context/CartContext";
-import { Button } from "react-bootstrap";
+import CheckoutForm from "../CheckoutForm/CheckoutForm";
+import { useState } from "react";
+import {
+  getDocs,
+  collection,
+  query,
+  where,
+  addDoc,
+  writeBatch,
+  documentId,
+} from "firebase/firestore";
 
 const Checkout = () => {
+  const [loading, setLoading] = useState(false);
   const [orderId, setOrderId] = useState("");
-  const { cartListProducts, totalCartAmount, clearCart } = useCartContext();
 
-  const [values, setValues] = useState({
-    name: "",
-    email: "",
-  });
+  const { cart, total, clearCart } = useContext(CartContext);
 
-  const handleInputChange = (e) => {
-    setValues({
-      ...values,
-      [e.target.name]: e.target.value,
-    });
+  const createOrder = async ({ name, phone, email }) => {
+    setLoading(true);
+    try {
+      const objOrder = {
+        buyer: { name, phone, email },
+        items: cart,
+        total: total,
+        date: Timestamp.fromDate(new Date()),
+      };
+      const batch = writeBatch(db);
+      const outOfStock = [];
+      const ids = cart.map((prod) => prod.id);
+      const productsRef = collection(db, "productos");
+      const productsAddedFromFirestore = await getDocs(
+        query(productsRef, where(documentId(), "in", ids))
+      );
+      const { docs } = productsAddedFromFirestore;
+      docs.forEach((doc) => {
+        const dataDoc = doc.data();
+        const stockDb = dataDoc.stock;
+        const productAddedToCart = cart.find((prod) => prod.id === doc.id);
+        const prodQuantity = productAddedToCart?.quantity;
+        if (stockDb >= prodQuantity) {
+          batch.update(doc.ref, { stock: stockDb - prodQuantity });
+        } else {
+          outOfStock.push({ id: doc.id, ...dataDoc });
+        }
+      });
+      if (outOfStock.length === 0) {
+        await batch.commit();
+        const orderRef = collection(db, "order");
+        const orderAdded = await addDoc(orderRef, objOrder);
+        setOrderId(orderAdded.id);
+        clearCart();
+      } else {
+        console.error("hay productos que estan fuera de stock");
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setLoading(false);
+    }
   };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    const order = {
-      buyer: values,
-      items: cartListProducts,
-      total: totalCartAmount(),
-    };
-
-    const itemsCollectionRef = collection(db, "order");
-    const response = await addDoc(itemsCollectionRef, order);
-    setOrderId(response.id);
-    clearCart();
-  };
+  if (loading) {
+    return <h2>Se esta creando el pedido...</h2>;
+  }
+  if (orderId) {
+    return <h2>El id de su pedido es: {orderId}</h2>;
+  }
 
   return (
-    <>
-      <form onSubmit={handleSubmit} autoComplete="off">
-        <h2>Realizar Pedido</h2>
-        <div>
-          <label>Nombre</label>
-          <div>
-            <input
-              placeholder="Nombre"
-              id="name"
-              name="name"
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-        <div>
-          <label>Email</label>
-          <div>
-            <input
-              placeholder="Email"
-              id="email"
-              name="email"
-              onChange={handleInputChange}
-            />
-          </div>
-        </div>
-
-        <div>
-          <Button variant="warning" is-link>
-            Enviar
-          </Button>
-        </div>
-      </form>
-
-      <div>
-        {orderId ? (
-          <div>
-            <h2 className="title is-3">Gracias por tu Compra!</h2>
-            <p>Tu número de compra es: {orderId}</p>
-          </div>
-        ) : (
-          ""
-        )}
-      </div>
-    </>
+    <div>
+      <h2>Checkout</h2>
+      <CheckoutForm onConfirm={createOrder} />
+    </div>
   );
 };
 

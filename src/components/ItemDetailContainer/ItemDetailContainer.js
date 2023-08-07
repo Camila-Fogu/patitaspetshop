@@ -3,26 +3,32 @@ import ItemDetail from "../ItemDetail/ItemDetail";
 import { useParams } from "react-router-dom";
 import { getDoc, doc } from "firebase/firestore";
 import { db } from "../../firebase/config";
-
 const ItemDetailContainer = () => {
-  const [item, setItem] = useState({});
-  const { productId } = useParams();
+  const [product, setProduct] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  const { itemId } = useParams();
 
   useEffect(() => {
-    const getProductosFromFirebase = async () => {
-      const docRef = doc(db, "productos", productId);
-
-      const querySnapshot = await getDoc(docRef);
-      const product = querySnapshot.data();
-      product["id"] = productId;
-      setItem(product);
-    };
-    getProductosFromFirebase();
-  }, [productId]);
+    setLoading(true);
+    const docRef = doc(db, "productos", itemId);
+    getDoc(docRef)
+      .then((response) => {
+        const data = response.data();
+        const productAdapted = { id: response.id, ...data };
+        setProduct(productAdapted);
+      })
+      .catch((error) => {
+        console.log(error);
+      })
+      .finally(() => {
+        setLoading(false);
+      });
+  }, [itemId]);
 
   return (
     <div className="item-list">
-      <ItemDetail producto={item} />
+      <ItemDetail {...product} />
     </div>
   );
 };
