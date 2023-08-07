@@ -1,16 +1,16 @@
 import Button from "react-bootstrap/Button";
 import { useState } from "react";
 
-function ItemCount({ stock, onAdd }) {
+function ItemCount({ stock, addProduct }) {
   const [count, setCount] = useState(0);
 
-  function handleClickSuma() {
+  function incrementarCount() {
     if (count < stock) {
       setCount(count + 1);
     }
   }
 
-  function handleClickResta() {
+  function decrementarCount() {
     if (count > 0) {
       setCount(count - 1);
     }
@@ -19,18 +19,18 @@ function ItemCount({ stock, onAdd }) {
   return (
     <div className="container-itemcount">
       <div className="item-count">
-        <Button onClick={handleClickResta} variant="warning">
+        <Button onClick={decrementarCount} variant="warning">
           -
         </Button>
 
         <h4>{count}</h4>
 
-        <Button onClick={handleClickSuma} variant="warning">
+        <Button onClick={incrementarCount} variant="warning">
           +
         </Button>
       </div>
       <div>
-        <Button variant="warning" onClick={() => onAdd(count)}>
+        <Button variant="warning" onClick={() => addProduct(count)}>
           Agregar al carrito
         </Button>
       </div>

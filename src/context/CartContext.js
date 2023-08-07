@@ -1,37 +1,69 @@
-import { createContext, useState } from "react";
+import React, { createContext, useState, useContext } from "react";
 
-export const CartContext = createContext({
-  cart: [],
-});
+const CartContext = createContext([]);
+
+export const useCartContext = () => {
+  return useContext(CartContext);
+};
 
 export const CartProvider = ({ children }) => {
-  const [cart, setCart] = useState([]);
+  const [cartListProducts, setCartListProducts] = useState([]);
 
-  console.log(cart);
-
-  const addItem = (item, quantity) => {
-    if (!isInCart(item.id)) {
-      setCart((prev) => [...prev, { ...item, quantity }]);
+  const addProductToCart = (product, count) => {
+    if (isInCart(product.id)) {
+      const productInCart = findProductById(product.id);
+      productInCart.count = productInCart.count + count;
+      const arrayUpdate = [...cartListProducts];
+      setCartListProducts(arrayUpdate);
     } else {
-      console.error("El producto ya fue agregado");
+      product["count"] = count;
+      setCartListProducts([...cartListProducts, product]);
     }
   };
 
-  const removeItem = (itemId) => {
-    const cartUpdated = cart.filter((prod) => prod.id !== itemId);
-    setCart(cartUpdated);
+  const findProductById = (id) => {
+    const productInCart = cartListProducts.find((product) => product.id === id);
+    console.log(productInCart);
+    return productInCart;
+  };
+
+  const deleteProductById = (id) => {
+    setCartListProducts(
+      cartListProducts.filter((product) => product.id !== id)
+    );
   };
 
   const clearCart = () => {
-    setCart([]);
+    setCartListProducts([]);
   };
 
-  const isInCart = (itemId) => {
-    return cart.some((prod) => prod.id === itemId);
+  const isInCart = (id) => {
+    return cartListProducts.some((product) => product.id === id);
+  };
+
+  const totalCartAmount = () => {
+    const total = cartListProducts.reduce(
+      (acc, product) => acc + product.count * product.precio,
+      0
+    );
+    return total;
+  };
+
+  const totalItemsInCart = () => {
+    return cartListProducts.reduce((acc, product) => (acc += product.count), 0);
   };
 
   return (
-    <CartContext.Provider value={{ cart, addItem, removeItem, clearCart }}>
+    <CartContext.Provider
+      value={{
+        cartListProducts,
+        addProductToCart,
+        deleteProductById,
+        clearCart,
+        totalItemsInCart,
+        totalCartAmount,
+      }}
+    >
       {children}
     </CartContext.Provider>
   );

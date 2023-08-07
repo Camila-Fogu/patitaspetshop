@@ -1,40 +1,26 @@
 import Card from "react-bootstrap/Card";
 import ItemCount from "../ItemCount/ItemCount";
-import { useState, useContext } from "react";
-import { CartContext } from "../../context/CartContext";
+import { useCartContext } from "../../context/CartContext";
 
-const ItemDetail = ({ id, name, img, category, description, price, stock }) => {
-  const [quantityAdded, setQuantityAdded] = useState(0);
+const ItemDetail = ({ producto }) => {
+  const { addProductToCart } = useCartContext();
 
-  const { addItem } = useContext(CartContext);
-
-  const handleOnAdd = (quantity) => {
-    setQuantityAdded(quantity);
-
-    const item = {
-      id,
-      name,
-      price,
-    };
-
-    addItem(item, quantity);
+  const addProduct = (count) => {
+    addProductToCart(producto, count);
   };
 
   return (
     <Card className="item" style={{ width: "18rem" }}>
       <Card.Body>
-        <Card.Title>{name}</Card.Title>
-        <Card.Text>{category}</Card.Text>
-        <Card.Img variant="top" src={img} />
-        <Card.Text>{description}</Card.Text>
-        <Card.Text>Precio: ${price}</Card.Text>
-        <Card.Text>Stock disponible: {stock}</Card.Text>
+        <Card.Title>{producto.name}</Card.Title>
+        <Card.Text>{producto.category}</Card.Text>
+        <Card.Img variant="top" src={producto.img} />
+        <Card.Text>{producto.description}</Card.Text>
+        <Card.Text>Precio: ${producto.price}</Card.Text>
+        <Card.Text>Stock disponible: {producto.stock}</Card.Text>
       </Card.Body>
       <Card.Body>
-        <ItemCount
-          stock={stock}
-          onAdd={(count) => console.log("Cantidad agregada ", count)}
-        />
+        <ItemCount stock={producto.stock} addProduct={addProduct} />
       </Card.Body>
     </Card>
   );
