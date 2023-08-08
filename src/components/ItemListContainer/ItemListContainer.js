@@ -5,7 +5,7 @@ import { getDocs, collection, query, where } from "firebase/firestore";
 import { db } from "../../firebase/config";
 
 const ItemListContainer = () => {
-  const [products, setProducts] = useState([]);
+  const [productos, setProductos] = useState([]);
   const [loading, setLoading] = useState(true);
 
   const { categoryId } = useParams();
@@ -19,11 +19,11 @@ const ItemListContainer = () => {
 
     getDocs(collectionRef)
       .then((response) => {
-        const productsAdapted = response.docs.map((doc) => {
+        const productosAdapted = response.docs.map((doc) => {
           const data = doc.data();
           return { id: doc.id, ...data };
         });
-        setProducts(productsAdapted);
+        setProductos(productosAdapted);
       })
       .catch((error) => {
         console.log(error);
@@ -32,9 +32,10 @@ const ItemListContainer = () => {
         setLoading(false);
       });
   }, [categoryId]);
+
   return (
     <div>
-      <ItemList products={products} />
+      {loading ? <p>Cargando...</p> : <ItemList productos={productos} />}
     </div>
   );
 };

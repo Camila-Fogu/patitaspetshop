@@ -14,6 +14,7 @@ function App() {
       <BrowserRouter>
         <CartProvider>
           <NavBar />
+          <h1>PATITAS PETSHOP</h1>
           <Routes>
             <Route path="/" element={<ItemListContainer />} />
             <Route

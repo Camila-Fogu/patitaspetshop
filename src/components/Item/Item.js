@@ -1,8 +1,9 @@
+import React from "react";
 import Button from "react-bootstrap/Button";
 import Card from "react-bootstrap/Card";
 import { Link } from "react-router-dom";
 
-const Item = ({ id, name, img, price, stock }) => {
+const Item = ({ id, name, price, img, stock }) => {
   return (
     <Card className="item">
       <Card.Body>

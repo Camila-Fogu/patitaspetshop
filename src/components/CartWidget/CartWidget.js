@@ -6,7 +6,9 @@ import { useContext } from "react";
 import { Link } from "react-router-dom";
 
 const CartWidget = () => {
-  const { totalQuantity } = useContext(CartContext);
+  const { cart } = useContext(CartContext);
+  const totalQuantity = cart.reduce((acc, item) => acc + item.quantity, 0);
+
   return (
     <Link
       to="/cart"
