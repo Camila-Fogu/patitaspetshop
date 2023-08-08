@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Button } from "bootstrap";
+import { Button } from "react-bootstrap";
 
 const CheckoutForm = ({ onConfirm }) => {
   const [name, setName] = useState("");
