@@ -23,13 +23,13 @@ body {
   padding-top: 6rem;
 }
 
-.container-itemcount {
-  width: 150px;
+h1 {
+  font-size: 2rem;
 }
 
 .item-count {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   margin-bottom: 0.5rem;
 }
 
@@ -48,14 +48,28 @@ body {
   width: 15rem;
 }
 
-.image {
-  width: 60%;
-  height: 60%;
-}
-
 .cart {
   padding: 1rem;
-  margin: 1rem;
   display: flex;
   flex-wrap: wrap;
+}
+
+.card-text {
+  margin-bottom: 0.5rem;
+}
+
+.cart-button {
+  margin: 0.5rem;
+}
+
+.img-name {
+  width: 18rem;
+}
+
+.cart-item {
+  margin: 1rem;
+}
+
+.container-form {
+  width: 50%;
 }

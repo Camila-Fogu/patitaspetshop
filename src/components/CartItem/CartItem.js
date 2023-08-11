@@ -1,24 +1,23 @@
 import React from "react";
 import { useContext } from "react";
 import { CartContext } from "../../context/CartContext";
-import { Card } from "react-bootstrap";
 import { Button } from "react-bootstrap";
+import ListGroup from "react-bootstrap/ListGroup";
 
 const CartItem = ({ id, name, price, quantity }) => {
   const { removeItem } = useContext(CartContext);
   return (
-    <Card key={id} className="cart">
-      <Card.Body>
-        <Card.Title>{name}</Card.Title>
-      </Card.Body>
-      <Card.Text>Precio: ${price}</Card.Text>
-      <Card.Text>Cantidad: {quantity}</Card.Text>
-      <Card.Text>Subtotal: ${quantity * price}</Card.Text>
-
-      <Button variant="warning" onClick={() => removeItem(id)}>
-        Borrar
-      </Button>
-    </Card>
+    <ListGroup horizontal key={id} className="cart-item">
+      <ListGroup.Item>{name}</ListGroup.Item>
+      <ListGroup.Item>Precio: ${price}</ListGroup.Item>
+      <ListGroup.Item>Cantidad: {quantity}</ListGroup.Item>
+      <ListGroup.Item>Subtotal: ${quantity * price}</ListGroup.Item>
+      <ListGroup.Item>
+        <Button variant="warning" onClick={() => removeItem(id)}>
+          Borrar
+        </Button>
+      </ListGroup.Item>
+    </ListGroup>
   );
 };
 

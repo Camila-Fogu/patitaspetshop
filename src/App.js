@@ -7,6 +7,8 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { CartProvider } from "./context/CartContext";
 import Cart from "./components/Cart/Cart";
 import Checkout from "./components/Checkout/Checkout";
+import nombre from "./assets/nombre.png";
+import { Image } from "react-bootstrap";
 
 function App() {
   return (
@@ -14,7 +16,7 @@ function App() {
       <BrowserRouter>
         <CartProvider>
           <NavBar />
-          <h1>PATITAS PETSHOP</h1>
+          <Image src={nombre} rounded className="img-name" />
           <Routes>
             <Route path="/" element={<ItemListContainer />} />
             <Route

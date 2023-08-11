@@ -29,20 +29,22 @@ const ItemDetail = ({ id, name, price, category, img, description, stock }) => {
         <Card.Text>{description}</Card.Text>
         <Card.Text>Precio: ${price}</Card.Text>
         <Card.Text>Stock disponible: {stock}</Card.Text>
-      </Card.Body>
-      <Card.Body>
-        {quantityAdded > 0 ? (
-          <Button variant="warning">
-            <Link to="/cart">Finalizar compra</Link>
-          </Button>
-        ) : (
-          <ItemCount
-            className="nav-link"
-            initial={1}
-            stock={stock}
-            onAdd={handleOnAdd}
-          />
-        )}
+        <div>
+          {quantityAdded > 0 ? (
+            <Button variant="warning">
+              <Link to="/cart" className="nav-link">
+                Finalizar compra
+              </Link>
+            </Button>
+          ) : (
+            <ItemCount
+              className="nav-link"
+              initial={1}
+              stock={stock}
+              onAdd={handleOnAdd}
+            />
+          )}
+        </div>
       </Card.Body>
     </Card>
   );
